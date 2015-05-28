@@ -1,0 +1,15 @@
+Gerador
+	gerar conteudo
+	enviar para difusor
+
+Informacao
+	Compactar informacao (usado no gerador)
+	descompactar informacao (usado no difusor)
+
+Difusor
+	
+
+
+Consumidor
+
+
