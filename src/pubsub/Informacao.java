@@ -15,7 +15,7 @@ public class Informacao {
 	}
 	
 	public String empacota(){
-		return ""+this.seq+";"+this.tipo+";"+this.valor;
+		return ""+this.seq+";"+this.tipo+";"+this.valor+";";
 	}
 	
 	public Informacao desempacota(String msg){
@@ -28,8 +28,8 @@ public class Informacao {
 		int seq = Integer.parseInt(part1);
 		int tipo = Integer.parseInt(part2);
 		int valor = Integer.parseInt(part3);
-		
-		return new Informacao(seq, tipo, valor);
+		Informacao info = new Informacao(seq, tipo, valor); 
+		return info;
 	}
 	
 	public int getSeq() {

@@ -8,28 +8,29 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Difusor {
-	private Informacao info = null;
+	
+	private Informacao info =  new Informacao(0, 0, 0);
 	private int seq = 0;
-	/**
-	 * @param args
-	 */
+	private Queue<Informacao> queue = new LinkedList<Informacao>();
+
 	public static void main(String[] args) {
 
 		Difusor dif = new Difusor();
 		
-		Gerador g1 = new Gerador(2, 10000, 1000, 10000, 1000);
-		g1.run();
-		Gerador g2 = new Gerador(4, 10000, 1000, 20000, 2000);
-		g2.run();
-		Gerador g3 = new Gerador(5, 10000, 1000, 30000, 3000);
-		g3.run();
+		Gerador g1 = new Gerador();
+		Gerador g2 = new Gerador();
+		Gerador g3 = new Gerador();
 		
-		//recebe informacao via UDP
-		dif.recebeUDP();
-		//recebe solicitacao via TCP
-		dif.recebeTCP();
+		while(true){
+			//recebe informacao via UDP
+			dif.recebeUDP();
+			//recebe solicitacao via TCP
+			dif.recebeTCP();
+		}
 		
 	}
 	
@@ -63,12 +64,12 @@ public class Difusor {
 				 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);         
 				 serverSocket.receive(receivePacket);              
 				 String sentence = new String( receivePacket.getData());        
-				 System.out.println("RECEIVED: " + sentence);
-				 
 				 info = info.desempacota(sentence);
 				 seq++;
 				 info.setSeq(seq);
-				 //TODO adicionar info na fila
+				 System.out.println("Seq:"+seq+" InfoSeq: "+info.getSeq() + " InfoTipo: " +info.getTipo()+ " InfoValor: "+ info.getValor());
+				 queue.add(info);
+				 
 			 }
 		} catch (SocketException e) {
 			e.printStackTrace();

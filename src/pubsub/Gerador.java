@@ -6,39 +6,38 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Random;
 
-public class Gerador extends Thread{
+import threads.EletronicosThread;
+import threads.EsportesThread;
+import threads.NegociosThread;
+import threads.NovidadesInternetThread;
+import threads.PoliticaThread;
+import threads.ViagensThread;
+
+public class Gerador{
 	
-	private int tipo;
-	private int vMax;
-	private int vMin;
-	private int tMax;
-	private int tMin;
+	private EsportesThread 			esp;
+	private NovidadesInternetThread nov;
+	private EletronicosThread 		ele;
+	private PoliticaThread 			pol;
+	private NegociosThread 			neg;
+	private ViagensThread 			via;
 	
-	public Gerador(int tipo, int vMax, int vMin, int tMax, int tMin) {
-		this.tipo = tipo;
-		this.vMax = vMax;
-		this.vMin = vMin;
-		this.tMax = tMax;
-		this.tMin = tMin;
-	}
-
-	public void run(){
-		while(true){
-			Random rand = new Random();
-			int dorme = rand.nextInt(tMax) + tMin;
-			int valor = rand.nextInt(vMax) + vMin;
-			try {
-				sleep(dorme);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			Informacao info = new Informacao(0, tipo, valor);
-			String msg = info.empacota();
-			sendInfo(msg);
-		}
-
+	
+	public Gerador(){
+		esp = new EsportesThread(1, 10000, 1000, 10000, 1000);
+		esp.start();
+		nov = new NovidadesInternetThread(2, 20000, 2000, 20000, 2000);
+		nov.start();
+		ele = new EletronicosThread(3, 30000, 3000, 30000, 3000);
+		ele.start();
+		pol = new PoliticaThread(4, 40000, 4000, 40000, 4000);
+		pol.start();
+		neg = new NegociosThread(5, 50000, 5000, 50000, 5000);
+		neg.start();
+		via = new ViagensThread(6, 60000, 6000, 60000, 6000);
+		via.start();
+	
 	}
 
 	public void sendInfo(String msg){
@@ -47,8 +46,7 @@ public class Gerador extends Thread{
 			clientSocket = new DatagramSocket();
 			InetAddress IPAddress = InetAddress.getByName("localhost");
 			byte[] sendData = new byte[1024];       
-			String sentence = msg;
-			sendData = sentence.getBytes();       
+			sendData = msg.getBytes();       
 			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
 			clientSocket.send(sendPacket);
 		} catch (SocketException e) {
