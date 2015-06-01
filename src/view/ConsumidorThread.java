@@ -11,49 +11,28 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static view.ClienteView.s;
 
 /**
  *
  * @author dionatan
  */
 public class ConsumidorThread extends Thread{
-    private String host;
-    private Integer porta;
-    String msg;
+    
+    public ConsumidorThread() {
 
-    public ConsumidorThread(String host, Integer porta, String msg) {
-        this.host = host;
-        this.porta = porta;
-        this.msg = msg;
     }
- 
-    public void connectar(){
-        try {
-            System.out.println("entrou function");
-
-            Socket s = new Socket(host, porta);
-            System.out.println("tentou chamar server");
-            ObjectInputStream in  = new ObjectInputStream(s.getInputStream());
-            System.out.println("conectou");
-            msg = (String)in.readObject();
-            System.out.println("Buscando informacao "+msg);  
-            
-            ObjectOutputStream esc = new ObjectOutputStream(s.getOutputStream());
-            String res = msg;
-            esc.writeObject(res);
-        } catch (IOException ex) {
-            Logger.getLogger(ConsumidorThread.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ConsumidorThread.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }
-
    
     public void run() {
-       //To change body of generated methods, choose Tools | Templates.
-        connectar();
-        
+       try {
+            ObjectInputStream read = new ObjectInputStream(s.getInputStream());
+            int info = (Integer)read.readObject();
+            System.out.println(info);
+            } catch (IOException ex) {
+                   System.out.println("consumidor time out");
+            } catch (ClassNotFoundException ex) {  
+            Logger.getLogger(ClienteView.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }
     
     
