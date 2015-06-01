@@ -255,14 +255,13 @@ public class ClienteView extends javax.swing.JFrame {
 	public void atualizaPanel(String info, int panel){
 		switch(panel){
 		case 1:
-			System.out.println(info);
 			jtaCliente1.setText(info);
 			break;
 		case 2:
-			
+			jtaCliente2.setText(info);
 			break;
 		case 3:
-			
+			jtaCliente3.setText(info);
 			break;
 		}
 	}
