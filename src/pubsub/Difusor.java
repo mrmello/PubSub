@@ -9,6 +9,8 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Level;
@@ -18,11 +20,12 @@ import view.ConsumidorThread;
 
 public class Difusor {
 
-	private Informacao info =  new Informacao(0, 0, 0);
-	private int seq = 0;
-	private Queue<Informacao> queue = new LinkedList<Informacao>();
+	public static Informacao info =  new Informacao(0, 0, 0);
+	public static int seq = 0;
+	public static ArrayList <Informacao> queue = new ArrayList<Informacao>();
 	public static ServerSocket serverSocket;
 	public static Socket s;
+        public static DatagramSocket udpserverSocket;
 
 	public static void main(String[] args) {
 
@@ -43,66 +46,29 @@ public class Difusor {
 	
 	public void connections(){
 		try {
+                    System.out.println("Connecting...");
 			serverSocket = new ServerSocket(1972);
 			serverSocket.setSoTimeout(1000);
+                        udpserverSocket = new DatagramSocket(9876);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void recebeTCP(){
-		System.out.println("TCP Waiting...");
-		try {
-			s = serverSocket.accept();
-			System.out.println("Connected!");
-			ObjectInputStream read = new ObjectInputStream(s.getInputStream());
-			int option = (Integer)read.readObject();
-			ObjectOutputStream esc = new ObjectOutputStream(s.getOutputStream());
-			esc.writeObject(option+100);
-		} catch (IOException e) {
-			System.out.println("TCP timeout");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+            try {
+                s = serverSocket.accept();
+                TCPThread rtt = new TCPThread();
+                rtt.start();
+            } catch (IOException ex) {
+                System.out.println("");
+            }
 	}
 	
-	public void enviaTCP(String obj){
-		try {
-			s.setSoTimeout(10000);
-			ObjectOutputStream esc = new ObjectOutputStream(s.getOutputStream());
-			esc.writeObject(obj);
-		} catch (IOException ex) {
-			Logger.getLogger(ConsumidorThread.class.getName()).log(Level.SEVERE, null, ex);
-		}  
-	}
 
 	public void recebeUDP(){
-		DatagramSocket serverSocket;
-		try {
-			serverSocket = new DatagramSocket(9876);
-			byte[] receiveData = new byte[1024];
-			int count = 0;
-			while(count < 5)             
-			{                
-				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);         
-				serverSocket.receive(receivePacket);              
-				String sentence = new String( receivePacket.getData());        
-				info = info.desempacota(sentence);
-				seq++;
-				info.setSeq(seq);
-				System.out.println("Seq:"+seq+" InfoSeq: "+info.getSeq() + " InfoTipo: " +info.getTipo()+ " InfoValor: "+ info.getValor());
-				queue.add(info);
-				count++;
-			}
-			count=0;
-			serverSocket.close();
-		} catch (SocketException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		UDPThread rut = new UDPThread();
+                rut.start();
 
 	}
 
