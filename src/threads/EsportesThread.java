@@ -11,7 +11,7 @@ import java.util.Random;
 import pubsub.Informacao;
 
 public class EsportesThread extends Thread{
-	
+
 	private int tipo;
 	private int vMax;
 	private int vMin;
@@ -25,14 +25,14 @@ public class EsportesThread extends Thread{
 		this.tMax = tMax;
 		this.tMin = tMin;
 	}
-	
+
 	public void run(){
 		while(true){
 			Random rand = new Random();
 			int dorme = rand.nextInt(tMax) + tMin;
 			int valor = rand.nextInt(vMax) + vMin;
 			try {
-				sleep(dorme * 100);
+				sleep(dorme);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -40,7 +40,6 @@ public class EsportesThread extends Thread{
 			String msg = info.empacota();
 			sendInfo(msg);
 		}
-
 	}
 	public void sendInfo(String msg){
 		DatagramSocket clientSocket;
@@ -60,4 +59,5 @@ public class EsportesThread extends Thread{
 		}
 
 	}
+
 }

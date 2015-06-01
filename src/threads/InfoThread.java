@@ -10,7 +10,7 @@ import java.util.Random;
 
 import pubsub.Informacao;
 
-public class NovidadesInternetThread extends Thread{
+public class InfoThread extends Thread{
 
 	private int tipo;
 	private int vMax;
@@ -18,7 +18,7 @@ public class NovidadesInternetThread extends Thread{
 	private int tMax;
 	private int tMin;
 
-	public NovidadesInternetThread(int tipo, int vMax, int vMin, int tMax, int tMin) {
+	public InfoThread(int tipo, int vMax, int vMin, int tMax, int tMin) {
 		this.tipo = tipo;
 		this.vMax = vMax;
 		this.vMin = vMin;

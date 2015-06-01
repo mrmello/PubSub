@@ -11,7 +11,7 @@ import java.util.Random;
 import pubsub.Informacao;
 
 public class PoliticaThread extends Thread{
-	
+
 	private int tipo;
 	private int vMax;
 	private int vMin;
@@ -25,7 +25,7 @@ public class PoliticaThread extends Thread{
 		this.tMax = tMax;
 		this.tMin = tMin;
 	}
-	
+
 	public void run(){
 		while(true){
 			Random rand = new Random();
@@ -40,7 +40,6 @@ public class PoliticaThread extends Thread{
 			String msg = info.empacota();
 			sendInfo(msg);
 		}
-
 	}
 	public void sendInfo(String msg){
 		DatagramSocket clientSocket;
@@ -60,4 +59,5 @@ public class PoliticaThread extends Thread{
 		}
 
 	}
+
 }
