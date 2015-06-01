@@ -231,16 +231,20 @@ public class ClienteView extends javax.swing.JFrame {
 		try {
 			ObjectOutputStream esc = new ObjectOutputStream(s.getOutputStream());
 			esc.writeObject(obj);
-			recebeTCP(panel);
+			ObjectInputStream read = new ObjectInputStream(s.getInputStream());
+			int info = (Integer)read.readObject();
+			System.out.println(info);
 		} catch (IOException ex) {
 			Logger.getLogger(ConsumidorThread.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}  
 	}
 	
 	public void recebeTCP(int panel){
 		try {
-			InputStream ip = s.getInputStream();
-			ObjectInputStream read = new ObjectInputStream(ip);
+			ObjectInputStream read = new ObjectInputStream(s.getInputStream());
 			String info = (String)read.readObject();
 			atualizaPanel(info, panel);
 		} catch (IOException e) {

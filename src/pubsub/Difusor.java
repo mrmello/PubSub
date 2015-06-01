@@ -55,10 +55,10 @@ public class Difusor {
 		try {
 			s = serverSocket.accept();
 			System.out.println("Connected!");
-			InputStream ip = s.getInputStream();
-			ObjectInputStream read = new ObjectInputStream(ip);
+			ObjectInputStream read = new ObjectInputStream(s.getInputStream());
 			int option = (Integer)read.readObject();
-			enviaTCP("teste");
+			ObjectOutputStream esc = new ObjectOutputStream(s.getOutputStream());
+			esc.writeObject(option+100);
 		} catch (IOException e) {
 			System.out.println("TCP timeout");
 		} catch (ClassNotFoundException e) {
