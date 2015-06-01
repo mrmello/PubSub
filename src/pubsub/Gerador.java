@@ -17,7 +17,7 @@ import threads.ViagensThread;
 public class Gerador{
 	
 	private EsportesThread 			esp;
-	private NovidadesInternetThread nov;
+	private NovidadesInternetThread         nov;
 	private EletronicosThread 		ele;
 	private PoliticaThread 			pol;
 	private NegociosThread 			neg;
