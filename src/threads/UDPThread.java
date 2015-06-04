@@ -1,10 +1,12 @@
-package pubsub;
+package threads;
 
 import static pubsub.Difusor.queue;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.SocketException;
+
+import pubsub.Difusor;
 
 public class UDPThread extends Thread{
 
