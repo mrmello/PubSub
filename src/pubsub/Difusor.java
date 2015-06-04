@@ -30,7 +30,6 @@ public class Difusor {
 		try {
 			udpserverSocket = new DatagramSocket(9876);
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -20,10 +20,15 @@ public class ClienteView extends javax.swing.JFrame {
 	 * Auto generated serial version
 	 */
 	private static final long serialVersionUID = -2780378464626420227L;
+	//threads para consumidores
 	public ConsumidorThread1 ct1;
 	public ConsumidorThread2 ct2;
 	public ConsumidorThread3 ct3;
-
+	//sinalizacao para parar a thread
+	public static boolean parar1 = false;
+	public static boolean parar2 = false;
+	public static boolean parar3 = false;
+	
 	public ClienteView() {
 		initComponents();
 		
@@ -202,10 +207,10 @@ public class ClienteView extends javax.swing.JFrame {
 	}// </editor-fold>                        
 
 	private void jcb1ActionPerformed(java.awt.event.ActionEvent evt) {                                     
-		// TODO add your handling code here:
 	}                                    
 
-	private void jcb1ItemStateChanged(java.awt.event.ItemEvent evt) {                                      
+	private void jcb1ItemStateChanged(java.awt.event.ItemEvent evt) {  
+		//instancia socket e start na thread para o prineiro panel
 		if(jcb1.getSelectedIndex() != 0){
 			try {
 				Socket st1 = new Socket("localhost", 1971);
@@ -222,7 +227,8 @@ public class ClienteView extends javax.swing.JFrame {
 		}
 	}                                     
 
-	private void jcb12ItemStateChanged(java.awt.event.ItemEvent evt) {                                       
+	private void jcb12ItemStateChanged(java.awt.event.ItemEvent evt) {  
+		//instancia socket e start na thread para o segundo panel
 		if(jcb2.getSelectedIndex() != 0){
 			try {
 				Socket st2 = new Socket("localhost", 1972);
@@ -239,7 +245,8 @@ public class ClienteView extends javax.swing.JFrame {
 		}
 	}                                      
 
-	private void jcb3ActionPerformed(java.awt.event.ActionEvent evt) {                                     
+	private void jcb3ActionPerformed(java.awt.event.ActionEvent evt) {   
+		//instancia socket e start na thread para o terceiro panel
 		if(jcb3.getSelectedIndex() != 0){
 			try {
 				Socket st3 = new Socket("localhost", 1973);
@@ -259,6 +266,7 @@ public class ClienteView extends javax.swing.JFrame {
 
 	private void btnParar1ActionPerformed(java.awt.event.ActionEvent evt) {                                          
 		try {
+			parar1 = true;
 			ct1.interrupt();
 			ct1.join(10);
 			System.out.println("parou 1");
@@ -268,6 +276,7 @@ public class ClienteView extends javax.swing.JFrame {
 	}
 	private void btnParar2ActionPerformed(java.awt.event.ActionEvent evt) {                                          
 		try {
+			parar2 = true;
 			ct2.interrupt();
 			ct2.join(10);
 			System.out.println("parou 2");
@@ -277,6 +286,7 @@ public class ClienteView extends javax.swing.JFrame {
 	} 
 	private void btnParar3ActionPerformed(java.awt.event.ActionEvent evt) {                                          
 		try {
+			parar3 = true;
 			ct3.interrupt();
 			ct3.join(10);
 			System.out.println("parou 3");
