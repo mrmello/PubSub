@@ -1,10 +1,10 @@
 package pubsub;
 
+import static pubsub.Difusor.queue;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.SocketException;
-import static pubsub.Difusor.queue;
 
 public class UDPThread extends Thread{
 
@@ -16,8 +16,7 @@ public class UDPThread extends Thread{
 		try {
 			
 			byte[] receiveData = new byte[1024];
-			int count = 0;
-			while(count < 5)             
+			while(true)             
 			{                
 				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);         
 				Difusor.udpserverSocket.receive(receivePacket);              
@@ -26,10 +25,7 @@ public class UDPThread extends Thread{
 				Difusor.seq++;
 				Difusor.info.setSeq(Difusor.seq);
 				queue.add(Difusor.info);
-				count++;
 			}
-			count=0;
-			Difusor.udpserverSocket.close();
 		} catch (SocketException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

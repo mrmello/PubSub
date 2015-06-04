@@ -1,75 +1,54 @@
 package pubsub;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import view.ConsumidorThread;
+import threads.TCPThread1;
+import threads.TCPThread2;
+import threads.TCPThread3;
 
 public class Difusor {
 
-	public static Informacao info =  new Informacao(0, 0, 0);
-	public static int seq = 0;
-	public static ArrayList <Informacao> queue = new ArrayList<Informacao>();
-	public static ServerSocket serverSocket;
-	public static Socket s;
-        public static DatagramSocket udpserverSocket;
+	public static Informacao 				info =  new Informacao(0, 0, 0);
+	public static int						seq = 0;
+	public static ArrayList <Informacao> 	queue = new ArrayList<Informacao>();
+	public static DatagramSocket 			udpserverSocket;
 
 	public static void main(String[] args) {
 
 		Difusor dif = new Difusor();
 
 		Gerador g1 = new Gerador();
+		g1.initializeThreads();
 		Gerador g2 = new Gerador();
+		g2.initializeThreads();
 		Gerador g3 = new Gerador();
-		dif.connections();
-		while(true){
-			//recebe informacao via UDP
-			dif.recebeUDP();
-			//recebe solicitacao via TCP
-			dif.recebeTCP();
-		}
-
-	}
-	
-	public void connections(){
+		g3.initializeThreads();
+		
 		try {
-                    System.out.println("Connecting...");
-			serverSocket = new ServerSocket(1972);
-			serverSocket.setSoTimeout(1000);
-                        udpserverSocket = new DatagramSocket(9876);
-		} catch (IOException e) {
+			udpserverSocket = new DatagramSocket(9876);
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		dif.recebeUDP();
+		dif.recebeTCP();
+
 	}
 
 	public void recebeTCP(){
-            try {
-                s = serverSocket.accept();
-                TCPThread rtt = new TCPThread();
-                rtt.start();
-            } catch (IOException ex) {
-                System.out.println("");
-            }
+		TCPThread1 t1 = new TCPThread1();
+		t1.start();
+		TCPThread2 t2 = new TCPThread2();
+		t2.start();
+		TCPThread3 t3 = new TCPThread3();
+		t3.start();
 	}
-	
 
 	public void recebeUDP(){
 		UDPThread rut = new UDPThread();
-                rut.start();
-
+		rut.start();
 	}
-
 }
